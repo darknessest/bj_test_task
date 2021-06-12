@@ -1,0 +1,62 @@
+{% extends "htmls/base/base_site.html" %}
+{% load static %}
+
+{% block body %}
+    {% if tasks %}
+        <table>
+            <thead>
+            <tr>
+                <th>User Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Text</th>
+                <th>Tag</th>
+                {% if user.is_authenticated %}
+                    <th>Actions</th>
+                {% endif %}
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for t in tasks %}
+                <tr>
+                    <td>{{ t.user_name }}</td>
+                    <td>{{ t.email }}</td>
+                    <td>{{ t.task_status }}</td>
+                    <td>{{ t.task_text }}</td>
+                    <td>
+                        {% if t.edited_by_admin %}
+                            edited by admin
+                        {% endif %}
+                    </td>
+                    {% if user.is_authenticated %}
+                        <td>
+                            <input type="button" value="edit"/>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    {% else %}
+        <p>No tasks available</p>
+    {% endif %}
+
+
+    <form action="{% url 'add_new' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ new_task_form }}
+        <input type="submit" value="add new">
+    </form>
+
+
+    {% if user.is_authenticated %}
+        <p><a href="{% url 'logout' %}">logout</a></p>
+    {% else %}
+        <p><a href="{% url 'login' %}">login</a></p>
+
+    {% endif %}
+
+
+{% endblock body %}
