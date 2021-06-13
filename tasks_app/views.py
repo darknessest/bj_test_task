@@ -55,6 +55,7 @@ def edit_task(request, task_id):
 
         task_to_edit = Task.objects.get(pk=task_id)
         task_to_edit.task_text = request.POST['task text']
+        task_to_edit.task_status = request.POST['task status']
         task_to_edit.edited_by_admin = request.user.is_superuser
         task_to_edit.save()
 

@@ -23,10 +23,6 @@
 
         function modalOnClick(url, text, status, type) {
 
-            console.log(url)
-            console.log(type)
-            console.log(text)
-
             let html;
             let id;
             let label;
@@ -120,9 +116,9 @@
 
 {% block header %}
 
-    <div class="card-header">
-        {% if user.is_authenticated %}
-            <div class="float-end">
+    <div class="container-fluid p-3">
+        <div class="position-relative">
+            <div class="position-absolute end-0">
                 {% if user.is_authenticated %}
                     You are logged in as <b>{{ user }}</b>
                     <a href="{% url 'logout' %}" class="btn btn-danger">logout</a>
@@ -130,15 +126,16 @@
                     <a href="{% url 'login' %}" class="btn btn-primary">login</a>
                 {% endif %}
             </div>
+            <div class="text-start start-0">
+                {% if user.is_authenticated %}
+                    <button type="button" class="btn btn-success"
+                            onclick="modalOnClick('{% url 'add_task' %}','','', 2)">
+                        Add New Task
+                    </button>
 
-            <div>
-                <button type="button" class="btn btn-success"
-                        onclick="modalOnClick('{% url 'add_task' %}','','', 2)">
-                    Add New Task
-                </button>
+                {% endif %}
             </div>
-        {% endif %}
-
+        </div>
     </div>
 {% endblock header %}
 
