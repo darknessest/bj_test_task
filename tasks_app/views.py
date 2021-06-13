@@ -1,7 +1,16 @@
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+
 from tasks_app.models import Task
 from tasks_app.forms import TaskForm
+
+response_base_ok = {"status": "ok", "message": {}}
+response_create_bad = {"status": "error", "message": {
+    "username": "Поле является обязательным для заполнения",
+    "email": "Неверный email",
+    "text": "Поле является обязательным для заполнения"
+}}
 
 
 def index(request):
@@ -62,18 +71,32 @@ def edit_task(request, task_id):
         return HttpResponseRedirect('/')
 
 
-# todo: delete V
-def AFK(request):
-    import urbandictionary as ud
+#############
+#   API ↓   ↓
+#############
+@csrf_exempt
+def create(request):
+    if request.method == 'POST':
+        tmp_form = TaskForm()
+        tmp_form.user_name = request.POST['username']
+        tmp_form.task_text = request.POST['text']
+        tmp_form.email = request.POST['email']
+        if not tmp_form.is_valid():
+            return JsonResponse(response_create_bad)
 
-    stuff = ud.random()
-    # print(stuff)
-    return render(request, "htmls/AFK.html", {'ud_word': stuff})
+        tmp_task = Task(
+            user_name=request.POST['username'],
+            task_text=request.POST['text'],
+            email=request.POST['email']
+        )
+        tmp_task.save()
 
+        response_base_ok['message'] = {
+            "id": tmp_task.id,
+            "username": tmp_task.user_name,
+            "email": tmp_task.email,
+            "text": tmp_task.task_text,
+            "task_status": tmp_task.task_status
+        }
 
-def test(request):
-    return render(request, "htmls/test.html", )
-
-
-def sample_http_resp(request):
-    return HttpResponse("hello from sample respose")
+        return JsonResponse(response_base_ok)

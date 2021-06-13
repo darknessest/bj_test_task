@@ -21,4 +21,3 @@ class Task(models.Model):
         choices=Status,
         default=0
     )
-
