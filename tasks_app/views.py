@@ -12,8 +12,8 @@ def index(request):
     :return:
     """
 
-    context = {'tasks': Task.objects.values(),
-               'new_task_form': TaskForm()
+    context = {'tasks': Task.objects.all(),
+               'new_task_form': TaskForm(),
                }
 
     return render(request, "htmls/tasks_app/index.html", context)
@@ -51,38 +51,15 @@ def edit_task(request, task_id):
         return JsonResponse(context)
 
     elif request.method == 'POST':
-        print(request.POST)
-
         task_to_edit = Task.objects.get(pk=task_id)
         task_to_edit.task_text = request.POST['task text']
+
         task_to_edit.task_status = request.POST['task status']
         task_to_edit.edited_by_admin = request.user.is_superuser
         task_to_edit.save()
 
         # todo: add save success
         return HttpResponseRedirect('/')
-
-
-# def get_task_form_by_id(request, task_id):
-#     if request.method == 'GET':
-#         task_text = Task.objects.get(pk=task_id).task_text
-#         # task_form = TaskForm.
-#         context = {
-#             'task_form': task_form
-#         }
-#
-#         return render(request, "htmls/tasks_app/edit_task.html", context)
-#
-#     elif request.method == 'POST':
-#         print(request.POST)
-#
-#         task_to_edit = Task.objects.get(pk=task_id)
-#         task_to_edit.task_text = request.POST['task text']
-#         task_to_edit.edited_by_admin = request.user.is_superuser
-#         task_to_edit.save()
-#
-#         # todo: add save success
-#         return HttpResponseRedirect('/')
 
 
 # todo: delete V

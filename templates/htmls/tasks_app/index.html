@@ -39,14 +39,21 @@
                                 method="post" enctype="multipart/form-data">
                             <div class="modal-body">
                                 {% csrf_token %}
-                                <label>
-                                    Task text
-                                    <input type="text" name="task text" size="20" value="` + text + `">
-                                </label>
-                                <label>
-                                    Task status
-                                    <input type="text" name="task status" size="20" value="` + status + `">
-                                </label>
+                                <div class="form-group">
+                                    <label for="task_status">Task status</label>
+                                    <select value="` + status + `" name="task status" id="task_status">
+                                          <option value="0">not done</option>
+                                          <option value="1">not done edited</option>
+                                          <option value="10">done</option>
+                                          <option value="11">edited</option>
+                                    </select>
+                                    {#<input id="task_status" class="form-control" type="text" name="task status" size="20" value="` + status + `">#}
+                                </div>
+                                <div class="form-group">
+                                    <label for="task_text">Task text</label>
+                                    <textarea id="task_text" name="task text" class="form-control">` + text + `</textarea>
+                                </div>
+{#                                {{ new_task_form.task_status }}#}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -57,20 +64,22 @@
             } else if (type === 2) {
                 id = "addNewTaskModalLabel"
                 label = "addNewTaskModalLabel"
-                html = `<div class="modal-header">
-                        <h5 class="modal-title" id="addNewTaskModalLabel">Adding New Task</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                html = `
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNewTaskModalLabel">Adding New Task</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="` + url + `" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        {{ new_task_form.as_p }}
                     </div>
-                    <form action="` + url + `" method="post" enctype="multipart/form-data">
-                        <div class="modal-body">
-                            {% csrf_token %}
-                            {{ new_task_form.as_p }}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>`;
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>`
+                ;
             }
             let exampleModal = getExampleModal(id);
 
@@ -116,7 +125,7 @@
 
 {% block header %}
 
-    <div class="container-fluid p-3">
+    <div class="container-fluid p-4">
         <div class="position-relative">
             <div class="position-absolute end-0">
                 {% if user.is_authenticated %}
@@ -159,7 +168,7 @@
                     <tr>
                         <td>{{ t.user_name }}</td>
                         <td>{{ t.email }}</td>
-                        <td>{{ t.task_status }}</td>
+                        <td>{{ t.get_task_status_display }}</td>
                         <td>{{ t.task_text }}</td>
                         <td>
                             {% if t.edited_by_admin %}
@@ -186,14 +195,14 @@
             {% endif %}
 
 
-        <div class="modal fade" id="addNewTaskModal" tabindex="-1" aria-labelledby="addNewTaskModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-
-                </div>
-            </div>
-        </div>
+{#        <div class="modal fade" id="addNewTaskModal" tabindex="-1" aria-labelledby="addNewTaskModalLabel"#}
+{#             aria-hidden="true">#}
+{#            <div class="modal-dialog">#}
+{#                <div class="modal-content">#}
+{##}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
 
     </div>
 {% endblock body %}
