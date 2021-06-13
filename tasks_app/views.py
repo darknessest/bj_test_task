@@ -1,7 +1,7 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-from .models import Task
-from .forms import TaskForm
+from tasks_app.models import Task
+from tasks_app.forms import TaskForm
 
 
 def index(request):
@@ -41,15 +41,14 @@ def add_new(request):
 
 
 def edit_task(request, task_id):
-    # print(request)
     if request.method == 'GET':
-        task_text = Task.objects.get(pk=task_id).task_text
+        tmp_task = Task.objects.get(pk=task_id)
         context = {
-            'task_text': task_text,
-            'task_id': task_id,
+            'task_text': tmp_task.task_text,
+            'task_status': tmp_task.task_status,
         }
 
-        return render(request, "htmls/tasks_app/edit_task.html", context)
+        return JsonResponse(context)
 
     elif request.method == 'POST':
         print(request.POST)
@@ -63,9 +62,39 @@ def edit_task(request, task_id):
         return HttpResponseRedirect('/')
 
 
+# def get_task_form_by_id(request, task_id):
+#     if request.method == 'GET':
+#         task_text = Task.objects.get(pk=task_id).task_text
+#         # task_form = TaskForm.
+#         context = {
+#             'task_form': task_form
+#         }
+#
+#         return render(request, "htmls/tasks_app/edit_task.html", context)
+#
+#     elif request.method == 'POST':
+#         print(request.POST)
+#
+#         task_to_edit = Task.objects.get(pk=task_id)
+#         task_to_edit.task_text = request.POST['task text']
+#         task_to_edit.edited_by_admin = request.user.is_superuser
+#         task_to_edit.save()
+#
+#         # todo: add save success
+#         return HttpResponseRedirect('/')
+
+
 # todo: delete V
 def AFK(request):
-    return render(request, "htmls/AFK.html")
+    import urbandictionary as ud
+
+    stuff = ud.random()
+    # print(stuff)
+    return render(request, "htmls/AFK.html", {'ud_word': stuff})
+
+
+def test(request):
+    return render(request, "htmls/test.html", )
 
 
 def sample_http_resp(request):

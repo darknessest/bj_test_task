@@ -12,6 +12,7 @@ urlpatterns = [
     # todo: delete V
     path('request_test', views.sample_http_resp, name='sample_http_resp'),
     path('AFK', views.AFK, name='AFK'),
+    path('test', views.test, name='test'),
 ]
 
 # urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

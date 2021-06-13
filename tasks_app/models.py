@@ -5,6 +5,13 @@ class Task(models.Model):
     """
         Model for a task
     """
+    # todo: edit V
+    # class Status(models.IntegerChoices):
+    #     NOT_DONE = 0
+    #     NOT_DONE_EDITED = 1
+    #     DONE = 10
+    #     DONE_EDITED = 11
+
     class Status(models.TextChoices):
         NOT_DONE = "не выполнено"
         ACTIVE = "в процессе"
