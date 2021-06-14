@@ -69,34 +69,3 @@ def edit_task(request, task_id):
 
         # todo: add save success
         return HttpResponseRedirect('/')
-
-
-#############
-#   API ↓   ↓
-#############
-@csrf_exempt
-def create(request):
-    if request.method == 'POST':
-        tmp_form = TaskForm()
-        tmp_form.user_name = request.POST['username']
-        tmp_form.task_text = request.POST['text']
-        tmp_form.email = request.POST['email']
-        if not tmp_form.is_valid():
-            return JsonResponse(response_create_bad)
-
-        tmp_task = Task(
-            user_name=request.POST['username'],
-            task_text=request.POST['text'],
-            email=request.POST['email']
-        )
-        tmp_task.save()
-
-        response_base_ok['message'] = {
-            "id": tmp_task.id,
-            "username": tmp_task.user_name,
-            "email": tmp_task.email,
-            "text": tmp_task.task_text,
-            "task_status": tmp_task.task_status
-        }
-
-        return JsonResponse(response_base_ok)
