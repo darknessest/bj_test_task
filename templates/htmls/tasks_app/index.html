@@ -19,8 +19,8 @@
     <script>
         $(document).ready(function () {
             $('#tasks_table').DataTable({
-                    "lengthMenu": [[3, 10, 25, 50, -1], [3, 10, 25, 50, "All"]]
-                });
+                "lengthMenu": [[3, 10, 25, 50, -1], [3, 10, 25, 50, "All"]]
+            });
         });
 
         function modalOnClick(url, text, status, type) {
@@ -138,13 +138,13 @@
                 {% endif %}
             </div>
             <div class="text-start start-0">
-                {% if user.is_authenticated %}
-                    <button type="button" class="btn btn-success"
-                            onclick="modalOnClick('{% url 'add_task' %}','','', 2)">
-                        Add New Task
-                    </button>
+                {#                {% if user.is_authenticated %}#}
+                <button type="button" class="btn btn-success"
+                        onclick="modalOnClick('{% url 'add_task' %}','','', 2)">
+                    Add New Task
+                </button>
 
-                {% endif %}
+                {#                {% endif %}#}
             </div>
         </div>
     </div>
